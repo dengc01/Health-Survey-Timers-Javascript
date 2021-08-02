@@ -1,0 +1,47 @@
+Qualtrics.SurveyEngine.addOnload(function()
+{
+ var header = document.createElement("div");  
+ header.className = "header"  
+ header.id = "header_1";  
+
+var timer = document.createElement("div");  
+ timer.className = "timer";  
+ timer.id = "timer_1";  
+ timer.innerHTML = "Time Remaining: <span id='time'>20:00</span>"; 
+
+header.appendChild(timer);
+document.body.insertBefore(header, document.body.firstChild);
+
+function startTimer(duration, display) {  
+  var timer = duration, minutes, seconds;  
+  var myTimer = setInterval(function() {  
+       Qualtrics.SurveyEngine.setEmbeddedData('TimeRemaining', timer);
+   minutes = parseInt(timer / 60, 10)  
+   seconds = parseInt(timer % 60, 10);  
+   minutes = minutes < 10 ? "0" + minutes : minutes;  
+   seconds = seconds < 10 ? "0" + seconds : seconds;  
+   var text = ('innerText' in display)? 'innerText' : 'textContent';
+   display[text] = minutes + ":" + seconds;  
+
+   if (--timer < 0) {  
+    clearInterval(myTimer);  
+    timeOver();  
+   }  
+  }, 1000);  
+ }  
+  
+var timerSeconds = parseInt("${e://Field/TimeRemaining}");  
+ display = document.querySelector('#time');  
+ startTimer(timerSeconds, display);  
+
+$('Buttons').hide();
+var that = this;
+this.questionclick = function(event,element){
+that.clickNextButton();
+}
+	
+ var timeOver = function() {  
+  /document.getElementById("timer_1").innerHTML = "Time is up.";  /
+     $('NextButton').click();
+ }  
+});
